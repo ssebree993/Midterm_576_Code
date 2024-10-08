@@ -1,0 +1,38 @@
+// Set up the map
+var map = new esri.Map("mapDiv", {
+    basemap: "streets",
+    center: [-87.6481, 43.0833],
+    zoom: 12
+});
+
+// Create a geocoder instance
+var geocoder = new esri.tasks.Locator("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
+
+// Function to handle search queries
+function searchNearby(query) {
+    geocoder.addressToLocations(query, function(response) {
+        if (response.length > 0) {
+            var searchResult = response[0];
+            var searchLocation = new esri.geometry.Point(searchResult.location.x, searchResult.location.y);
+
+            // Create a query task and query
+            var queryTask = new esri.tasks.QueryTask("https://your-feature-service-url"); // Replace with your feature service URL
+            var query = new esri.tasks.Query();
+            query.geometry = searchLocation;
+            query.distance = 1000; // Search within 1 km
+            query.returnGeometry = false;
+
+            queryTask.execute(query, function(results) {
+                // Process query results and display suggestions using Calcite UI components
+                var suggestionList = document.getElementById("suggestionList");
+                suggestionList.innerHTML = "";
+                for (var i = 0; i < results.length; i++) {
+                    var suggestion = results[i];
+                    var suggestionItem = document.createElement("calcite-list-item");
+                    suggestionItem.textContent = suggestion.name; // Customize the content as needed
+                    suggestionList.appendChild(suggestionItem);
+                }
+            });
+        }
+    });
+}

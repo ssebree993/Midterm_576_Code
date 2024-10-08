@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>ArcGIS Maps SDK for JavaScript Tutorials: Find places</title>
+    <link rel="icon" href="data:,">  <!--remove favicon error in chrome-->
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.30/"></script>
+    <script>
+      require([
+        "esri/config",
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/rest/locator",
+        "esri/Graphic",
+        "esri/core/reactiveUtils"
+      ], (esriConfig, Map, MapView, locator, Graphic, reactiveUtils) => {
+
+        // Set the API key for ArcGIS
+        esriConfig.apiKey = "AAPKb74f725394aa4e348e7e403b02d26f5bCO4U66jjMKSyUPIG1efMlhwXNncMszfx-S7DNYBW0LiXgVNtNJrL9NeJOFxW4e2K";
+
+        // Create a new map with the "arcgis/navigation" basemap
+        const map = new Map({
+          basemap: "arcgis-navigation"
+        });
+
+        // Create a new MapView and set its properties
+        const view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [-97.58567276857534, 27.8407913734218], // Longitude, latitude
+          zoom: 13
+        });
+
+        // Define the place types for the dropdown
+        const places = ["Choose a place type...", "Parks and Outdoors", "Coffee shop", "Gas station", "Food", "Hotel"];
+
+        // Create a select element for place types
+        const select = document.createElement("select");
+        select.setAttribute("class", "esri-widget esri-select");
+        select.setAttribute("style", "width: 175px; font-family: 'Avenir Next W00'; font-size: 1em");
+
+        // Populate the select element with options
+        places.forEach((p) => {
+          const option = document.createElement("option");
+          option.value = p;
+          option.innerHTML = p;
+          select.appendChild(option);
+        });
+
+        // Add the select element to the top-right corner of the view
+        view.ui.add(select, "top-right");
+
+        // Define the locator URL
+        const locatorUrl = "http://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
+
+        // Function to find places and add them to the map
+        function findPlaces(category, pt) {
+          locator
+            .addressToLocations(locatorUrl, {
+              location: pt,
+              categories: [category],
+              maxLocations: 25,
+              outFields: ["Place_addr", "PlaceName"]
+            })
+            .then((results) => {
+              view.closePopup();
+              view.graphics.removeAll();
+
+              // Add each result as a graphic to the view
+              results.forEach((result) => {
+                view.graphics.add(
+                  new Graphic({
+                    attributes: result.attributes, // Data attributes returned
+                    geometry: result.location, // Point returned
+                    symbol: {
+                      type: "simple-marker",
+                      color: "#000000",
+                      size: "12px",
+                      outline: {
+                        color: "#ffffff",
+                        width: "2px"
+                      }
+                    },
+                    popupTemplate: {
+                      title: "{PlaceName}", // Data attribute names
+                      content: "{Place_addr}"
+                    }
+                  })
+                );
+              });
+            });
+        }
+
+        // Search for places in the center of the map when the view is stationary
+        reactiveUtils.when(
+          () => view.stationary,
+          () => {
+            findPlaces(select.value, view.center);
+          }
+        );
+
+        // Listen for category changes and find places
+        select.addEventListener("change", (event) => {
+          findPlaces(event.target.value, view.center);
+        });
+
+      });
+    </script>
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>
