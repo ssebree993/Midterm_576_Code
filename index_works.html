@@ -81,8 +81,8 @@
 
         <calcite-shell-panel slot="panel-start" display-mode="float">
             <calcite-action-bar slot="action-bar">
-                <calcite-action data-action-id="information" icon="information" text="Information"></calcite-action>
-                <calcite-action data-action-id="pie" icon="explore" text="Pie"></calcite-action>
+                <calcite-action data-action-id="information" icon="information" text="About"></calcite-action>
+                <calcite-action data-action-id="pie" icon="plus-square" text="Pie"></calcite-action>
                 <calcite-action data-action-id="layers" icon="layers" text="Layers"></calcite-action>
                 <calcite-action data-action-id="basemaps" icon="basemap" text="Basemaps"></calcite-action>
                 <calcite-action data-action-id="legend" icon="legend" text="Legend"></calcite-action>
@@ -118,7 +118,7 @@
             </calcite-panel>
 
             <!-- Info panel (populates with info from the web map) -->
-            <calcite-panel heading="Details" data-panel-id="information" hidden>
+            <calcite-panel heading="Map Details" data-panel-id="information" hidden>
                 <div id="info-content">
                     <img id="item-thumbnail" alt="webmap thumbnail" />
                     <div id="item-description">
