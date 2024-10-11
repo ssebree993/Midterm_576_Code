@@ -3,20 +3,20 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" /> 
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="description" content="UW-Madison Geog 576 Midterm Project" />
-    <meta name="author" content="Sonja Sebree" /> 
-    <link rel="icon" href="data:,">  <!--remove favicon error in chrome-->
-    
+    <meta name="author" content="Sonja Sebree" />
+    <link rel="icon" href="data:,"> <!-- remove favicon error in chrome -->
+
     <title>Midterm 576 Project</title>
 
-    <!-- importing calcite templates-->
+    <!-- Importing calcite templates -->
     <script src="https://js.arcgis.com/calcite-components/2.12.2/calcite.esm.js" type="module"></script>
     <link rel="stylesheet" href="https://js.arcgis.com/calcite-components/2.12.2/calcite.css" />
-    
-    <!-- Importing essential css libraries-->
+
+    <!-- Importing essential css libraries -->
     <script src="https://js.arcgis.com/4.30/"></script>
-    <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css" /> <!--changed 2 zoom buttons to dark -->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -52,29 +52,30 @@
 </head>
 
 <body>
+    <!--
+        1. Kolache Feature Class Kolache_Locator_Results
+           https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/survey123_90dfb79478e54045aa7bf05431f648df_results/FeatureServer
 
-<!--         1. Kolache Feature Class Kolache_Locator_Results
-                https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/survey123_90dfb79478e54045aa7bf05431f648df_results/FeatureServer
+        2. Add Bakery Layer
+           https://services6.arcgis.com/Do88DoK2xjTUCXd1/arcgis/rest/services/OSM_Shops_NA/FeatureServer
 
-             2. Add Bakery Layer 
-                https://services6.arcgis.com/Do88DoK2xjTUCXd1/arcgis/rest/services/OSM_Shops_NA/FeatureServer
+        2a. Change pointer to a map view, not Webmap application
 
-             2a. Change pointer to a map view, not Webmap application
+        3. Change calcite icons & functions
+        3. FIND Places - add upper right corner
 
-             3. Change calcite icons & functions
-             3. FIND Places -  add upper right corner
+        5. QUERY Capability - Add to calcite menu
+        6. Hook Survey123 to calcite menu https://arcg.is/9Pmm9
 
-             5. QUERY Capability - Add to calcite menu
-             6. Hook Survey123 to calcite menu https://arcg.is/9Pmm9
-
-             7. EDIT interface -->
+        7. EDIT interface
+    -->
 
     <!-- Calcite components -->
     <calcite-loader></calcite-loader>
     <calcite-shell content-behind hidden>
         <calcite-navigation slot="header">
             <calcite-navigation-logo id="header-title" heading-level="1" slot="logo">
-                <!-- Dynamically populated -->  <!-- Name this to xxx-->
+                <!-- Dynamically populated -->
             </calcite-navigation-logo>
         </calcite-navigation>
 
@@ -143,7 +144,7 @@
             "esri/widgets/BasemapGallery",
             "esri/widgets/LayerList",
             "esri/widgets/Legend",
-            "esri/widgets/Print", 
+            "esri/widgets/Print",
             "esri/widgets/Search",
             "esri/widgets/Locate"
         ], function (WebMap, MapView, Bookmarks, BasemapGallery, LayerList, Legend, Print, Search, Locate) {
@@ -204,9 +205,7 @@
                 document.querySelector("#item-thumbnail").src = thumbnailUrl;
                 document.querySelector("#item-rating").value = avgRating;
                 let activeWidget;
-                const handleActionBarClick = ({
-                    target
-                }) => {
+                const handleActionBarClick = ({ target }) => {
                     if (target.tagName !== "CALCITE-ACTION") {
                         return;
                     }
