@@ -1,0 +1,213 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="description" content="UW-Madison Geog 576 Midterm Project" />
+    <meta name="author" content="Sonja Sebree" />
+    
+    <title>Kolache Locator</title>
+    <link rel="icon" type="image/x-icon" href="image/meat_pie_color.png" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aguafina+Script&family=Sixtyfour+Convergence&display=swap" rel="stylesheet">
+    
+    <script src="https://js.arcgis.com/calcite-components/1.9.2/calcite.esm.js" type="module"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/calcite-components/1.9.2/calcite.css" />
+
+    <script src="https://js.arcgis.com/4.30/"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css" />
+  </head>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+    body {
+      display: flex;
+    }
+    calcite-shell-panel {
+      --calcite-shell-panel-min-width: 320px;
+      --calcite-ui-brand: #c9bb6e;
+      --calcite-ui-brand-hover: #c9bb6e;
+    }
+    #header-title {
+      padding: 0 1rem;
+      margin: 0.4rem 0.4rem;
+      font-family: 'Sixtyfour Convergence', serif;
+        font-size: 1.5 rem;
+    }
+
+  </style>
+
+  <body>
+
+    <calcite-shell content-behind class="calcite-light">
+      <h2 id="header-title" slot="header">
+        <span style="font-style: oblique;">Kolache Locator Road Trip 2024</span>
+      </h2>
+      <!-- Calcite Shell Panel to organize UI -->
+      <calcite-shell-panel slot="panel-start" display-mode="float">
+        <calcite-action-bar slot="action-bar">
+          <calcite-action-group>
+            <calcite-action data-action-id="information" icon="information" text="About"></calcite-action>
+            <calcite-action data-action id="addDragon" icon="plus-circle" text="Add Kolache"></calcite-action>
+            <calcite-action data-action-id="Layers" icon="layers" text="Layers"></calcite-action>  
+            <calcite-action data-action-id="basemap" icon="basemap" text="Basemap"></calcite-action>
+            <calcite-action data-action-id="layersReference" icon="legend" text="Layer Info"></calcite-action>
+            <calcite-action data-action-id="queryAttributes" icon="data-magnifying-glass" text="Search"></calcite-action>
+          </calcite-action-group>
+          <calcite-action-group slot="bottom-actions">
+            <calcite-action data-action-id="credits" icon="users" text="Credits"></calcite-action>
+          </calcite-action-group>
+        </calcite-action-bar>
+
+        <!-- Map-specific panels (each one provides a div for a ArcGIS Maps SDK for JavaScript widget) -->
+        <calcite-panel heading="Layers" height-scale="l" data-panel-id="Layers" hidden>
+          <div id="layers-container"></div>
+        </calcite-panel>
+
+        <!-- Info panel -->
+        <calcite-panel heading="About" height-scale="l" data-panel-id="information" hidden>
+          <div id="information-container">
+            This map is meant to be an inclusive collection of dragons from many genres: folklore, urban legends, history, biology. Click on the points to learn more about different dragons!</br>
+          <p>Use the tools on the left side panel to interact with the data on the map.</p>
+            <div id="side-panel-information">
+              <h4><calcite-icon icon="data-magnifying-glass"></calcite-icon> Search the Dragon Database</h4>
+              <p>Select attributes related to dragons to search the database. Results given will correspond to points on the map.</p>
+              <h4><calcite-icon icon="layers"></calcite-icon> Layers</h4>
+              <p>Explore layers related to reptile diversity!</p>
+              <h4><calcite-icon icon="layers-reference"></calcite-icon>Layer Information</h4>
+              <p>Info on the reptile diversity layers.</p>
+              <h4><calcite-icon icon="plus-circle"></calcite-icon> Add a Dragon</h4>
+              <p>This project is made better by including knowledge from multiple backgrounds! Check this tool to read about how to add a new dragon into the database.</p>
+            </div>
+          </div>
+        </calcite-panel>
+      
+        <!-- Layer Info panel -->
+        <calcite-panel height-scale="l" heading="Layer Information" data-panel-id="layersReference" hidden>
+          <div id="layer-reference-container">
+            <div id="side-panel-information">
+              <h4 style="margin-top:0;"><calcite-icon scale="m" icon="layer"></calcite-icon>Reptile Richness and Rarity</h4>
+              <p>This layer shows biodiversity of reptile species expressed as percentile rank, from the Map of Life Living Atlas Publisher. <i>Species richness</i> is the number of species ranges estimated to occur in each grid cell. <i>Species rarity</i> is the average range-restrictedness of all species expected to occuur in each cell.<br>Loading is slow due to data processing.</p>
+              <h4><calcite-icon scale="m" icon="layer"></calcite-icon>Amphibian Richness and Rarity</h4>
+              <p>The same as above but with amphibians, also from the same source data.</p>
+              <h4><calcite-icon scale="m" icon="layer"></calcite-icon>Number of Terrestrial Lizard and Snake Species</h4>
+              <p>Data from the WWF WildFinder database for species occurrences by ecoregion. Data shown is from the following taxanomic groups: Sauria, Serpentes, Amphisbaenia, and Rhynchocephalia.</p>
+            </div>
+          </div>
+        </calcite-panel>
+      
+        <!-- Add a Dragon panel -->
+      <calcite-panel height-scale="l" heading="Add a Kolache" data-panel-id="addDragon" hidden>
+        <div id="addDragon-container">
+          <h4 style="margin-top:0;">Submission Guidelines:</h4>
+          <p>Click the button below to add kolache or other item to the kolache database. This will open a new page with Survey123. Please follow the guided survey with a submission.</p>
+          <div style="display:flex; margin: 1rem 1rem;">
+            <calcite-button href="https://arcg.is/1reu9q" icon-end="launch" label="Open Dragon Database Survey123 Link" target="_blank" style="margin:auto;"> Open Dragon Database Survey
+            </calcite-button>
+          </div>
+        </div>
+      </calcite-panel>
+
+        <!-- Credit panel -->
+        <calcite-panel height-scale="l" heading="Credits" data-panel-id="credits" hidden>
+          <div id="credits-container">
+            Sonja Sebree, UW-Madison Geog 576 Midterm Project</br>
+            <p>Made with ArcGIS JavaScript</p>
+            <p>Layer Credits:</p>
+            <dl>
+              <dt>Species Richness and Rarity</dt>
+              <dd>- Used for Reptile and Amphibian layers</dd>
+              <dd>- Feature layer by Map of Life</dd>
+              <dd>- ArcGIS layer 
+                <a href="https://www.arcgis.com/home/item.html?id=08fbd2c0db94442db4e4835092dcc01b#overview" target="_blank">overview page </a>
+              </dd>
+              <dd></dd>
+              <dt>No. of Terrestrial Lizard and Snake Species</dt>
+              <dd>- By tboucher on The Living Atlas</dd>
+              <dd>- Also available on Data Basin</dd>
+              <dd>- ArcGIS layer 
+                <a href="https://www.arcgis.com/home/item.html?id=4d8d7703ec5e4337a0ac1a20edb6a5d3" target="_blank">overview page </a>
+              </dd>
+              <dd></dd>
+              <dt>Basemap</dt>
+              <dd>- "Newspaper" ESRI Basemap</dd>
+              <dd>- ArcGIS layer  
+                <a href="https://www.arcgis.com/home/item.html?id=75a3ce8990674a5ebd5b9ab66bdab893" target="_blank">overview page </a>
+              </dd>
+            </dl> 
+          </div>
+        </calcite-panel>
+
+
+
+      <!-- End of calcite items, div for map in viewDiv-->
+      </calcite-shell-panel>
+      <div id="viewDiv"></div>
+    </calcite-shell>
+  </body>
+
+  <script>
+    require([
+      "esri/config",
+      "esri/Basemap",
+      "esri/Map",
+      "esri/PopupTemplate",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Expand",
+      "esri/widgets/LayerList",
+      "esri/widgets/Legend",
+      "esri/widgets/Search",
+      "esri/smartMapping/renderers/relationship",
+      "esri/smartMapping/symbology/relationship"
+    ], (esriConfig, Basemap, Map, PopupTemplate, MapView, FeatureLayer, Expand, LayerList, Legend, Search, relationshipRendererCreator, relationshipSchemes) => 
+    
+    (async () => {
+      
+    esriConfig.apiKey = "AAPKfc7af196c6e64aac988bbf7529dccd648UR6aqr1HCuaJ5GN7OXourF3WZ9GF_b8R9-mMcrEZMHlZzpuLXHwt5iwInOA9k4J";
+
+      // Newspaper base from ESRI
+      const basemap = new Basemap({
+        portalItem: {
+          id: "75a3ce8990674a5ebd5b9ab66bdab893"
+        }
+      });
+
+      const map = new Map({
+        basemap
+      });
+       
+      const view = new MapView({
+        map,
+        container: "viewDiv",
+        center: [-97.09456568138219, 31.806629736017207], //West, Texas home of Slovaceks
+        zoom: 9,
+        padding: {
+          left: 49
+        }
+      });
+            // Create a search widget
+            const searchWidget = new Search({  //Customize the search widget
+                view: view,
+                allPlaceholder: "Find my cat" // Placeholder text for the search box
+            });
+
+            // Add the search widget to the top right corner of the view
+            view.ui.add(searchWidget, {
+                position: "top-right", 
+                index: 1
+            });
+      
+    view.ui.move("zoom", "top-right");
+
+
+    })());
+  </script>
+</html>

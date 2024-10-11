@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <script type="module" src=https://js.arcgis.com/calcite-components/2.13.0/calcite.esm.js></script>
+    <link rel="stylesheet" type="text/css" href=https://js.arcgis.com/calcite-components/2.13.0/calcite.css />
     <title>Intro to MapView - Create a 2D map</title>
     <style>
       html,
@@ -17,20 +19,51 @@
     <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css" />
     <script src="https://js.arcgis.com/4.30/"></script>
     <script>
-      require(["esri/Map", "esri/views/MapView"], (Map, MapView) => {
-        const map = new Map({
-          basemap: "topo-vector"
-        });
-        const view = new MapView({
-          container: "viewDiv", // Reference to the view div created in step 5
-          map: map, // Reference to the map object created before the view
-          zoom: 4, // Sets zoom level based on level of detail (LOD)
-          center: [15, 65] // Sets center point of view using longitude,latitude
-        });
+    require([
+      "esri/config",
+      "esri/Basemap",
+      "esri/Map",
+      "esri/PopupTemplate",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Expand",
+      "esri/widgets/LayerList",
+      "esri/widgets/Legend",
+      "esri/widgets/Search",
+      "esri/smartMapping/renderers/relationship",
+      "esri/smartMapping/symbology/relationship"
+    ], (esriConfig, Basemap, Map, PopupTemplate, MapView, FeatureLayer, Expand, LayerList, Legend, Search, relationshipRendererCreator, relationshipSchemes) => {
+    
+    (async () => {
+      
+    esriConfig.apiKey = "AAPKfc7af196c6e64aac988bbf7529dccd648UR6aqr1HCuaJ5GN7OXourF3WZ9GF_b8R9-mMcrEZMHlZzpuLXHwt5iwInOA9k4J";
+
+      // newpaper base map
+      const basemap = new Basemap({
+        portalItem: {
+          id: "75a3ce8990674a5ebd5b9ab66bdab893"
+        }
       });
+
+      const map = new Map({
+        basemap
+      });
+
+      const view = new MapView({
+        container: "viewDiv", // Reference to the view div created in step 5
+        map: map, // Reference to the map object created before the view
+        zoom: 5, // Sets zoom level based on level of detail (LOD)
+        center: [-92, 45.65] // Sets center point of view using longitude,latitude 45.85974319696206, -92.02322809326986
+      });
+
+    })();
+
+    });
+
     </script>
   </head>
-  <body>
+  <body>    
     <div id="viewDiv"></div>
   </body>
 </html>
+
