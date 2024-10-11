@@ -1,4 +1,3 @@
-@ -1,240 +0,0 @@
 <!DOCTYPE html>
 <html lang="en">
 
@@ -105,7 +104,7 @@
             <calcite-panel heading="Basemaps" height-scale="l" data-panel-id="basemaps" hidden>
                 <div id="basemaps-container"></div>
             </calcite-panel>
-            <calcite-panel heading="Legend" height-scale="l" data-panel-id="legend" hidden>
+            <calcite-panel heading="Legend" height-scale="l" data-panel-id="legend" hidden></calcite-panel>
                 <div id="legend-container"></div>
             </calcite-panel>
             <calcite-panel heading="Bookmarks" height-scale="l" data-panel-id="bookmarks" hidden>
@@ -162,7 +161,7 @@
                     left: 49
                 }
             });
-            view.ui.move("zoom", "top-left");
+            view.ui.move("zoom", "top-right");
             const basemaps = new BasemapGallery({
                 view,
                 container: "basemaps-container"
