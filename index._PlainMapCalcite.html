@@ -12,8 +12,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Aguafina+Script&family=Sixtyfour+Convergence&display=swap" rel="stylesheet">
     
-    <script src="https://js.arcgis.com/calcite-components/1.9.2/calcite.esm.js" type="module"></script>
-    <link rel="stylesheet" href="https://js.arcgis.com/calcite-components/1.9.2/calcite.css" />
+    <!--load hosted version CDN Calcite -->
+    <script type="module" src="https://js.arcgis.com/calcite-components/2.13.0/calcite.esm.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/2.13.0/calcite.css" />
 
     <script src="https://js.arcgis.com/4.30/"></script>
     <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css" />
@@ -44,7 +45,9 @@
   </style>
 
   <body>
-    <calcite-shell content-behind class="calcite-light">
+   <calcite-loader active></calcite-loader>
+  
+   <calcite-shell content-behind class="calcite-light">
       <h2 id="header-title" slot="header">
         <span style="font-style: oblique;">Kolache Locator Road Trip 2024</span>
       </h2>
@@ -168,6 +171,7 @@
         document.querySelector("#item-description").innerHTML = description;
         document.querySelector("#item-thumbnail").src = thumbnailUrl;
         document.querySelector("#item-rating").value = avgRating;
+
         
         let activeWidget;
 
@@ -193,6 +197,18 @@
 
         document.querySelector("calcite-action-bar").addEventListener("click", handleActionBarClick);
         //blows up on next toggle action
+        let actionBarExpanded = false;
+        document.querySelector("calcite-action-bar").addEventListener("calciteActionBarToggle", () => {
+          actionBarExpanded = !actionBarExpanded;
+          view.ui.padding = {
+            top: actionBarExpanded ? 0 : 49,
+            left: 49,
+            right: 0,
+            bottom: 0
+          };
+        });
+        document.querySelector("calcite-shell").hidden = false;
+        document.querySelector("calcite-loader").hidden = true;
       }); 
       view.ui.move("zoom", "top-right");
     })());
