@@ -23,20 +23,32 @@
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <meta name="description" content="UW-Madison Geog 576 Midterm Project" />
     <meta name="author" content="Sonja Sebree" />
-    
+
     <title>Kolache Locator</title>
     <link rel="icon" type="image/x-icon" href="image/meat_pie_color.png" />
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Aguafina+Script&family=Sixtyfour+Convergence&display=swap" rel="stylesheet">
-    
-    <!--load hosted version CDN Calcite -->
+
+    <!-- Load hosted version CDN Calcite -->
     <script type="module" src="https://js.arcgis.com/calcite-components/2.13.0/calcite.esm.js"></script>
     <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/2.13.0/calcite.css" />
 
     <script src="https://js.arcgis.com/4.30/"></script>
-    <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css" />
+    <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/css/main.css" />
+
+    <script>
+      // Initialize Calcite components
+      window.addEventListener('load', () => {
+        const calciteApp = document.querySelector('calcite-app');
+        if (calciteApp) {
+          calciteApp.componentOnReady().then(() => {
+            console.log('Calcite components initialized');
+          });
+        }
+      });
+    </script>
   </head>
   <style>
     html,
@@ -195,37 +207,36 @@
       });
           
       map.when(() => {
-        const { title, description, thumbnailUrl, avgRating } = map.portalItem;
-        document.querySelector("#header-title").heading = title;
-        document.querySelector("#item-description").innerHTML = description;
-        document.querySelector("#item-thumbnail").src = thumbnailUrl;
-        document.querySelector("#item-rating").value = avgRating;
+      const { title, description, thumbnailUrl, avgRating } = map.portalItem;
+      document.querySelector("#header-title").heading = title;
+      document.querySelector("#item-description").innerHTML = description;
+      document.querySelector("#item-thumbnail").src = thumbnailUrl;
+      document.querySelector("#item-rating").value = avgRating;
 
-        
-        let activeWidget;
+      let activeWidget;
 
-        const handleActionBarClick = ({ target }) => {
-          if (target.tagName !== "CALCITE-ACTION") {
-            return;
-          }
+      const handleActionBarClick = ({ target }) => {
+        if (target.tagName !== "CALCITE-ACTION") {
+          return;
+        }
 
-          if (activeWidget) {
-            document.querySelector(`[data-action-id=${activeWidget}]`).active = false;
-            document.querySelector(`[data-panel-id=${activeWidget}]`).hidden = true;
-          }
+        if (activeWidget) {
+          document.querySelector(`[data-action-id=${activeWidget}]`).active = false;
+          document.querySelector(`[data-panel-id=${activeWidget}]`).hidden = true;
+        }
 
-          const nextWidget = target.dataset.actionId;
-          if (nextWidget !== activeWidget) {
-            document.querySelector(`[data-action-id=${nextWidget}]`).active = true;
-            document.querySelector(`[data-panel-id=${nextWidget}]`).hidden = false;
-            activeWidget = nextWidget;
-          } else {
-            activeWidget = null;
-          }
-        };
+        const nextWidget = target.dataset.actionId;
+        if (nextWidget !== activeWidget) {
+          document.querySelector(`[data-action-id=${nextWidget}]`).active = true;
+          document.querySelector(`[data-panel-id=${nextWidget}]`).hidden = false;
+          activeWidget = nextWidget;
+        } else {
+          activeWidget = null;
+        }
+      };
 
         document.querySelector("calcite-action-bar").addEventListener("click", handleActionBarClick);
-        //blows up on next toggle action
+        //check dimensions -
         let actionBarExpanded = false;
         document.querySelector("calcite-action-bar").addEventListener("calciteActionBarToggle", () => {
           actionBarExpanded = !actionBarExpanded;

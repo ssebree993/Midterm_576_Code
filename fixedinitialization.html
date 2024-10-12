@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="description" content="UW-Madison Geog 576 Midterm Project" />
+    <meta name="author" content="Sonja Sebree" />
+
+    <title>Kolache Locator</title>
+    <link rel="icon" type="image/x-icon" href="image/meat_pie_color.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aguafina+Script&family=Sixtyfour+Convergence&display=swap" rel="stylesheet">
+
+    <!-- Load hosted version CDN Calcite -->
+    <script type="module" src="https://js.arcgis.com/calcite-components/2.13.0/calcite.esm.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/2.13.0/calcite.css" />
+
+    <script src="https://js.arcgis.com/4.30/"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/css/main.css" />
+
+    <script>
+      // Initialize Calcite components
+      window.addEventListener('load', () => {
+        const calciteApp = document.querySelector('calcite-app');
+        if (calciteApp) {
+          calciteApp.componentOnReady().then(() => {
+            console.log('Calcite components initialized');
+          });
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Welcome to Kolache Locator</h1>
+
+    <!-- Sample Calcite Button -->
+    <calcite-button
+      appearance="solid"
+      color="blue"
+      onclick="alert('Button clicked!')"
+    >
+      Click Me
+    </calcite-button>
+
+  </body>
+</html>
