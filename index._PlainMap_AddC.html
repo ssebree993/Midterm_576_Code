@@ -1,0 +1,193 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="description" content="UW-Madison Geog 576 Midterm Project" />
+    <meta name="author" content="Sonja Sebree" />
+    
+    <title>Kolache Locator</title>
+    <link rel="icon" type="image/x-icon" href="image/meat_pie_color.png" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aguafina+Script&family=Sixtyfour+Convergence&display=swap" rel="stylesheet">
+    
+    <script src="https://js.arcgis.com/calcite-components/1.9.2/calcite.esm.js" type="module"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/calcite-components/1.9.2/calcite.css" />
+
+    <script src="https://js.arcgis.com/4.30/"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css" />
+  </head>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+    body {
+      display: flex;
+    }
+    calcite-shell-panel {
+      --calcite-shell-panel-min-width: 320px;
+      --calcite-ui-brand: #c9bb6e;
+      --calcite-ui-brand-hover: #c9bb6e;
+    }
+    #header-title {
+      padding: 0 1rem;
+      margin: 0.4rem 0.4rem;
+      font-family: 'Sixtyfour Convergence', serif;
+        font-size: 1.5 rem;
+    }
+
+  </style>
+
+  <body>
+
+    <calcite-shell content-behind class="calcite-light">
+      <h2 id="header-title" slot="header">
+        <span style="font-style: oblique;">Kolache Locator Road Trip 2024</span>
+      </h2>
+
+      <!-- Calcite Shell Panel to organize UI -->
+      <calcite-shell-panel slot="panel-start" display-mode="float">
+        <calcite-action-bar slot="action-bar">
+          <calcite-action-group>
+            <calcite-action data-action-id="information" icon="information" text="Information"></calcite-action>
+            <calcite-action data-action id="addK" icon="plus-circle" text="Add Kolache"></calcite-action>
+            <calcite-action data-action-id="Layers" icon="layers" text="Layers"></calcite-action>  
+            <calcite-action data-action-id="basemaps" icon="basemap" text="Basemaps"></calcite-action>
+            <calcite-action data-action-id="legend" icon="legend" text="Legend"></calcite-action>
+            <calcite-action data-action-id="queryAttributes" icon="data-magnifying-glass" text="Search"></calcite-action>
+          </calcite-action-group>
+          <calcite-action-group slot="bottom-actions">
+            <calcite-action data-action-id="credits" icon="users" text="Credits"></calcite-action>
+          </calcite-action-group>
+        </calcite-action-bar>
+
+      <!-- Map-specific panels (each one provides a div for ArcGIS Maps SDK for JavaScript widgets) -->
+      <calcite-panel heading="Information" height-scale="l" data-panel-id="information" hidden>
+        <div id="information-container">
+            <p>Find the best kolaches in Texas!</p>
+            <p>Click the "Add Kolache" button to add a new kolache location to the map.</p>
+            <p>Click the "Layers" button to view the layers in the map.</p>
+            <p>Click the "Basemaps" button to change the basemap.</p>
+            <p>Click the "Legend" button to view the legend.</p>
+            <p>Click the "Search" button to search for a kolache location.</p>
+        </div> 
+      </calcite-panel>
+      <calcite-panel heading="Add Kolache" height-scale="l" data-panel-id="addK" hidden>
+        <div id="kolache-container"></div> 
+      </calcite-panel>
+     <calcite-panel heading="Layers" height-scale="l" data-panel-id="layers" hidden>
+        <div id="layers-container"></div>
+      </calcite-panel>
+      <calcite-panel heading="Basemaps" height-scale="l" data-panel-id="basemaps" hidden>
+        <div id="basemaps-container"></div>
+      </calcite-panel>
+      <calcite-panel heading="Legend" height-scale="l" data-panel-id="legend" hidden>
+          <div id="legend-container"></div>
+      </calcite-panel>
+        <calcite-panel heading="Search" height-scale="l" data-panel-id="queryAttributes" hidden>
+          <div id="queryAttributes-container"></div>
+      
+        <!-- Credit panel -->
+        <calcite-panel height-scale="l" heading="Credits" data-panel-id="credits" hidden>
+          <div id="credits-container">
+            Sonja Sebree, UW-Madison Geog 576 Midterm Project</br>
+            <p>Made with ArcGIS JavaScript</p>
+            <p>Layer Credits:</p>
+            <dl>
+              <dt>Basemap</dt>
+              <dd>- "Newspaper" ESRI Basemap</dd>
+              <dd>- ArcGIS layer  
+                <a href="https://www.arcgis.com/home/item.html?id=75a3ce8990674a5ebd5b9ab66bdab893" target="_blank">overview page </a>
+              </dd>
+            </dl> 
+          </div>
+        </calcite-panel>
+
+      <!-- End of calcite items, div for map in viewDiv-->
+      </calcite-shell-panel>
+      <div id="viewDiv"></div>
+    </calcite-shell>
+  </body>
+
+  <script>
+    require([
+      "esri/config",
+      "esri/Basemap",
+      "esri/BasemapGallery",
+      "esri/Map",
+      "esri/PopupTemplate",
+      "esri/views/MapView",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Expand",
+      "esri/widgets/LayerList",
+      "esri/widgets/Legend",
+      "esri/widgets/Search",
+      "esri/smartMapping/renderers/relationship",
+      "esri/smartMapping/symbology/relationship"
+    ], (esriConfig, Basemap, BasemapGallery, Map, PopupTemplate, MapView, FeatureLayer, Expand, LayerList, Legend, Search, relationshipRendererCreator, relationshipSchemes) => 
+    
+    (async () => {
+      
+    esriConfig.apiKey = "AAPKfc7af196c6e64aac988bbf7529dccd648UR6aqr1HCuaJ5GN7OXourF3WZ9GF_b8R9-mMcrEZMHlZzpuLXHwt5iwInOA9k4J";
+
+      // Newspaper base from ESRI
+      const basemap = new Basemap({
+        portalItem: {
+          id: "75a3ce8990674a5ebd5b9ab66bdab893"
+        }
+      });
+
+      const map = new Map({
+        basemap
+      });
+       
+      const view = new MapView({
+        map,
+        container: "viewDiv",
+        center: [-97.09456568138219, 31.806629736017207], //West, Texas home of Slovaceks
+        zoom: 9,
+        padding: {
+          left: 49
+        }
+      });
+            // Create a search widget
+            const searchWidget = new Search({  //Customize the search widget
+                view: view,
+                allPlaceholder: "Find my cat" // Placeholder text for the search box
+            });
+
+            // Add the search widget to the top right corner of the view
+            view.ui.add(searchWidget, {
+                position: "bottom-right", 
+                index: 1
+            });
+
+    // Add the basemap gallery
+    const basemaps = new BasemapGallery({
+      view,
+      container: "basemaps-container"
+    });
+
+    const layerList = new LayerList({
+      view,
+      dragEnabled: true,
+      visibilityAppearance: "checkbox",
+      container: "layers-container"
+    });
+    const legend = new Legend({
+      view,
+      container: "legend-container"
+    });
+      
+    view.ui.move("zoom", "top-right");
+
+
+    })());
+  </script>
+</html>
