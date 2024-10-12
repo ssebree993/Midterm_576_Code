@@ -1,3 +1,22 @@
+<!-- 
+
+  This HTML document is part of the UW-Madison Geog 576 Midterm Project by Sonja Sebree. 
+  It creates a web application named "Kolache Locator" using ArcGIS JavaScript API and Calcite Components.
+  
+  The application includes:
+  - A map centered on West, Texas, with a custom basemap from ESRI.
+  - A Calcite Shell layout with various panels for information, adding kolache locations, layers, basemaps, legend, and querying the database.
+  - A search widget for finding locations on the map.
+  - An action bar with buttons to toggle the visibility of different panels.
+  - A credits panel with project and layer information.
+
+  External resources used:
+  - Calcite Components (https://js.arcgis.com/calcite-components/2.13.0/)
+  - ArcGIS JavaScript API (https://js.arcgis.com/4.30/)
+  - Google Fonts (https://fonts.googleapis.com/css2?family=Aguafina+Script&family=Sixtyfour+Convergence&display=swap)
+
+  The script initializes the map, configures the search widget, and handles the action bar interactions to toggle panel visibility.
+-->
 <html>
   <head>
     <meta charset="utf-8" />
@@ -42,25 +61,22 @@
       font-family: 'Sixtyfour Convergence', serif;
       font-size: 1.5rem;
     }
-
     calcite-loader {
-    align-self: center;
-    justify-self: center;
-  }
-
-  #info-content {
-    padding: 0.75rem;
-  }
-
-  calcite-rating {
-    margin-top: 0.25rem;
-  }
+      align-self: center;
+      justify-self: center;
+    }
+    #info-content {
+      padding: 0.75rem;
+    }
+    calcite-rating {
+      margin-top: 0.25rem;
+    }
   </style>
 
   <body>
-   <calcite-loader active></calcite-loader>
+    <calcite-loader active></calcite-loader>
   
-   <calcite-shell content-behind class="calcite-light">
+    <calcite-shell content-behind class="calcite-light">
       <h2 id="header-title" slot="header">
         <span style="font-style: oblique;">Kolache Locator Road Trip 2024</span>
       </h2>
