@@ -17,7 +17,7 @@
     <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/2.13.0/calcite.css" />
 
     <script src="https://js.arcgis.com/4.30/"></script>
-    <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css" />
+    <link rel="stylesheet" href="https://js.arcgis.com/4.30/esri/themes/light/main.css" />
   </head>
   <style>
     html,
@@ -201,7 +201,7 @@
         document.querySelector("calcite-action-bar").addEventListener("calciteActionBarToggle", () => {
           actionBarExpanded = !actionBarExpanded;
           view.ui.padding = {
-            top: actionBarExpanded ? 0 : 49,
+            top: actionBarExpanded ? 0 : 49, //what is this, and is it correct for the calcite shell?
             left: 49,
             right: 0,
             bottom: 0
